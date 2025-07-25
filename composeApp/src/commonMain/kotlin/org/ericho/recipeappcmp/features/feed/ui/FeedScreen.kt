@@ -45,10 +45,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import org.koin.compose.viewmodel.koinViewModel
 import org.ericho.recipeappcmp.features.common.domain.entities.RecipeItem
 import org.ericho.recipeappcmp.features.common.ui.components.ErrorContent
-import org.ericho.recipeappcmp.features.common.ui.components.Loader
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun FeedRoute(
@@ -83,15 +82,19 @@ fun FeedScreen(
     ) { innerPadding ->
         when {
             feedUiState.recipesListIsLoading -> {
-                Loader()
+                FeedSkeletonLoading(modifier = Modifier.padding(innerPadding))
             }
 
             feedUiState.recipesListError != null -> {
-                ErrorContent()
+                ErrorContent(modifier = Modifier.padding(innerPadding))
             }
 
             recipes != null -> {
-                FeedContent(innerPadding = innerPadding, recipes = recipes, navigateToDetail = navigateToDetail)
+                FeedContent(
+                    modifier = Modifier.padding(innerPadding),
+                    recipes = recipes,
+                    navigateToDetail = navigateToDetail
+                )
             }
         }
 
@@ -110,7 +113,7 @@ private fun TopBar(navigateToSearch: () -> Unit) {
     ) {
 
         Text(
-            text = "Hi Alan!",
+            text = "Hi Eric!",
             color = MaterialTheme.colorScheme.primaryContainer,
             style = MaterialTheme.typography.titleMedium
         )
@@ -170,16 +173,14 @@ private fun SearchBar(
 @Composable
 private fun FeedContent(
     navigateToDetail: (Long) -> Unit,
-    innerPadding: PaddingValues,
+    modifier: Modifier,
     recipes: List<RecipeItem>
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(
-            top = innerPadding.calculateTopPadding()
-        )
+        modifier = modifier
     ) {
         item(
             span = { GridItemSpan(maxLineSpan) }

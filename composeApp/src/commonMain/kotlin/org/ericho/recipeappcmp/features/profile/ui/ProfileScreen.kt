@@ -33,11 +33,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.ericho.recipeappcmp.features.common.ui.components.ErrorContent
+import org.ericho.recipeappcmp.features.common.ui.components.SnailLoader
+import org.ericho.recipeappcmp.features.profile.data.User
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.ericho.recipeappcmp.features.common.ui.components.ErrorContent
-import org.ericho.recipeappcmp.features.common.ui.components.Loader
-import org.ericho.recipeappcmp.features.profile.data.User
 import recipeapp_cmp.composeapp.generated.resources.Res
 import recipeapp_cmp.composeapp.generated.resources.avatar
 import recipeapp_cmp.composeapp.generated.resources.profile_dummy
@@ -92,7 +92,7 @@ fun ProfileScreen(
         }
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(top = innerPadding.calculateTopPadding())
+            modifier = Modifier.padding(innerPadding)
         ) {
             HorizontalDivider(
                 thickness = 0.3.dp,
@@ -111,7 +111,7 @@ fun ProfileScreen(
                 }
 
                 profileScreenUiState.isLoading -> {
-                    Loader()
+                    SnailLoader()
                 }
 
                 profileScreenUiState.error != null -> {

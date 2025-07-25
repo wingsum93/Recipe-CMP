@@ -44,8 +44,8 @@ class ProfileViewModel : ViewModel() {
             ProfileScreenUiState(
                 userInfo = User(
                     id = 1,
-                    name = "John",
-                    email = "john@gmail.com",
+                    name = "Eric",
+                    email = "eric@gmail.com",
                     myRecipeCount = 20,
                     favoriteRecipeCount = 10,
                     followers = 140

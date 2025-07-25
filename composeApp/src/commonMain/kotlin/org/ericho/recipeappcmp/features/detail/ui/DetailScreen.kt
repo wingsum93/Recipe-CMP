@@ -52,9 +52,9 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import org.koin.compose.viewmodel.koinViewModel
 import org.ericho.recipeappcmp.features.common.data.models.captializeFirstWord
 import org.ericho.recipeappcmp.features.common.domain.entities.RecipeItem
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun DetailRoute(
@@ -174,7 +174,7 @@ fun DetailScreen(
 
             when {
                 uiState.recipesDetailIsLoading -> {
-                    LoadingScreen()
+                    RecipeSkeletonLoading()
                 }
 
                 uiState.recipesDetailError != null -> {
