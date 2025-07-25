@@ -21,7 +21,7 @@ class LoginViewModel: ViewModel() {
 
                 delay(1500)
 
-                if (email == "test@gmail.com" && password == "test") {
+                if (email == "eric@gmail.com" && password == "test") {
                     _loginState.value = LoginState.Success
                 } else {
                     _loginState.value = LoginState.Error(

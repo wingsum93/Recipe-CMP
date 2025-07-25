@@ -38,10 +38,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import org.koin.compose.viewmodel.koinViewModel
 import org.ericho.recipeappcmp.features.common.domain.entities.RecipeItem
 import org.ericho.recipeappcmp.features.common.ui.components.ErrorContent
 import org.ericho.recipeappcmp.features.common.ui.components.Loader
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun FavoritesRoute(
@@ -105,11 +105,15 @@ fun FavoritesScreen(
                 }
 
                 recipes != null -> {
-                    FavoriteContent(
-                        innerPadding = innerPadding,
-                        recipes = recipes,
-                        navigateToDetail = navigateToDetail
-                    )
+                    if (recipes.isNotEmpty()) {
+                        FavoriteContent(
+                            innerPadding = innerPadding,
+                            recipes = recipes,
+                            navigateToDetail = navigateToDetail
+                        )
+                    } else {
+                        EmptyFavouriteScreen()
+                    }
                 }
             }
         }

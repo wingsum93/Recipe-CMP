@@ -38,7 +38,7 @@ class ProfileViewModel : ViewModel() {
         )
 
         //call your api here
-        delay(1000)
+        delay(2000)//mock loading time for demonstration purposes
 
         emit(
             ProfileScreenUiState(

@@ -14,19 +14,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.Close
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalBottomSheetProperties
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,12 +44,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.ericho.recipeappcmp.features.common.ui.components.ErrorContent
+import org.ericho.recipeappcmp.features.common.ui.components.LoginButton
+import org.ericho.recipeappcmp.features.common.ui.components.LoginButtonState
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.ericho.recipeappcmp.features.common.ui.components.ErrorContent
 import recipeapp_cmp.composeapp.generated.resources.Res
 import recipeapp_cmp.composeapp.generated.resources.app_name
 import recipeapp_cmp.composeapp.generated.resources.recipe_app_logo
@@ -75,7 +78,7 @@ fun LoginScreenModalBottomSheet(
         email = ""
         password = ""
     }
-
+    val focusManager = LocalFocusManager.current
     val scope = rememberCoroutineScope()
     val onCloseIconClick = {
         scope.launch {
@@ -85,6 +88,7 @@ fun LoginScreenModalBottomSheet(
             if (!bottomSheetState.isVisible) {
                 onClose()
             }
+            focusManager.clearFocus()
         }
     }
 
@@ -98,13 +102,14 @@ fun LoginScreenModalBottomSheet(
             onDismissRequest = {
                 onClose()
                 clearInputFields()
+                focusManager.clearFocus()
             },
             sheetState = bottomSheetState,
             properties = ModalBottomSheetProperties(
                 shouldDismissOnBackPress = true
             )
         ) {
-            val focusManager = LocalFocusManager.current
+
             Column(
                 modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -139,7 +144,9 @@ fun LoginScreenModalBottomSheet(
 
                 }
 
-                Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp)
+                ) {
 
                     //Image or logo
                     Image(
@@ -151,9 +158,10 @@ fun LoginScreenModalBottomSheet(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    //Email INput
+                    //Email Input
 
                     OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
                             focusedLabelColor = MaterialTheme.colorScheme.primaryContainer,
@@ -163,6 +171,7 @@ fun LoginScreenModalBottomSheet(
                         ),
                         value = email,
                         onValueChange = {
+                            if (loginState is LoginState.Error) loginViewModel.resetState()
                             email = it
                         },
                         label = {
@@ -170,6 +179,7 @@ fun LoginScreenModalBottomSheet(
                         },
                         singleLine = true, // ✅ 限制為單行
                         keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next // ✅ 設定鍵盤動作為 Next
                         ),
                         keyboardActions = KeyboardActions(
@@ -178,13 +188,18 @@ fun LoginScreenModalBottomSheet(
                                 focusManager.moveFocus(FocusDirection.Down)
                             }
                         ),
-                        modifier = Modifier.fillMaxWidth()
+                        isError = if (password.isEmpty()) false else email.isBlank(),
+                        supportingText = {
+                            if (email.isBlank()) Text("Email is required")
+                        }
                     )
 
 
                     Spacer(modifier = Modifier.height(16.dp))
 
+                    var passwordVisible by remember { mutableStateOf(false) }
                     OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
                             focusedLabelColor = MaterialTheme.colorScheme.primaryContainer,
@@ -194,13 +209,20 @@ fun LoginScreenModalBottomSheet(
                         ),
                         value = password,
                         onValueChange = {
+                            if (loginState is LoginState.Error) loginViewModel.resetState()
                             password = it
                         },
                         label = {
                             Text("Password")
                         },
-                        modifier = Modifier.fillMaxWidth(),
-                        visualTransformation = PasswordVisualTransformation(),
+                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            val image =
+                                if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Icon(image, contentDescription = null)
+                            }
+                        },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password, // ✅ 密碼鍵盤類型
                             imeAction = ImeAction.Done // ✅ IME Action = Enter / Done
@@ -216,15 +238,18 @@ fun LoginScreenModalBottomSheet(
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
-
+                    var loginBtnState by remember(loginState) {
+                        when (loginState) {
+                            is LoginState.Loading -> mutableStateOf(LoginButtonState.LOADING)
+                            is LoginState.Error -> mutableStateOf(LoginButtonState.ERROR)
+                            is LoginState.Success -> mutableStateOf(LoginButtonState.SUCCESS)
+                            else -> mutableStateOf(LoginButtonState.NORMAL)
+                        }
+                    }
                     when (
                         loginState
                     ) {
                         is LoginState.Loading -> {
-                            CircularProgressIndicator(
-                                modifier = Modifier.align(Alignment.CenterHorizontally),
-                                color = MaterialTheme.colorScheme.primaryContainer
-                            )
                         }
 
                         is LoginState.Error -> {
@@ -232,8 +257,8 @@ fun LoginScreenModalBottomSheet(
                         }
 
                         is LoginState.Success -> {
-
                             LaunchedEffect(Unit) {
+                                delay(500) // 顯示成功動畫或提示
                                 onCloseIconClick()
                                 onLoginSuccess()
                             }
@@ -242,20 +267,15 @@ fun LoginScreenModalBottomSheet(
                         else -> Unit
                     }
 
+
                     //Button
-                    Button(
+                    LoginButton(
                         modifier = Modifier.fillMaxWidth().height(45.dp),
-                        colors = ButtonDefaults.buttonColors().copy(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.contentColorFor(MaterialTheme.colorScheme.primaryContainer),
-                        ),
+                        state = loginBtnState,
                         onClick = {
                             loginViewModel.login(email, password)
-                        },
-                        enabled = loginState !is LoginState.Loading,
-                    ) {
-                        Text("Login", color = MaterialTheme.colorScheme.onPrimary)
-                    }
+                        }
+                    )
 
                     Spacer(modifier = Modifier.height(16.dp))
 

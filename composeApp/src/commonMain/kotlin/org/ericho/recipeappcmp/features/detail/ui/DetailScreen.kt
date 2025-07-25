@@ -22,15 +22,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -54,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import org.ericho.recipeappcmp.features.common.data.models.captializeFirstWord
 import org.ericho.recipeappcmp.features.common.domain.entities.RecipeItem
+import org.ericho.recipeappcmp.features.common.ui.components.FavoriteHeartButton
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -198,16 +196,6 @@ fun DetailScreen(
 }
 
 @Composable
-fun LoadingScreen() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
 fun ErrorScreen(errorMessage: String, onBackClick: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -254,7 +242,7 @@ fun RecipeDetailContent(
                 ).padding(horizontal = 16.dp)
                 .align(Alignment.TopCenter)
         ) {
-
+            // back button
             IconButton(
                 onClick = onBackClick,
                 modifier = Modifier.padding(horizontal = 8.dp).size(30.dp).background(
@@ -271,26 +259,11 @@ fun RecipeDetailContent(
                 )
             }
 
+            // star button
 
-            IconButton(
-                onClick = {
-                    onSaveClick(recipeItem)
-                },
-                modifier = Modifier.padding(horizontal = 8.dp).size(30.dp).background(
-                    color = MaterialTheme.colorScheme.background.copy(
-                        alpha = 0.8f
-                    ),
-                    shape = CircleShape
-                )
-            ) {
-                Icon(
-                    imageVector = if (recipeItem.isFavorite) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground
-                )
+            FavoriteHeartButton(isFavorite = recipeItem.isFavorite) {
+                onSaveClick(recipeItem)
             }
-
-
         }
 
     }
