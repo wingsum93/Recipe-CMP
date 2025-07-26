@@ -227,10 +227,10 @@ fun RecipeDetailContent(
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
-
         RecipeMainContent(
             recipeItem,
-            onWatchVideoClick
+            onWatchVideoClick,
+            onSaveClick
         )
 
         //Back and Save Button UI
@@ -259,21 +259,15 @@ fun RecipeDetailContent(
                     tint = MaterialTheme.colorScheme.onBackground
                 )
             }
-
-            // star button
-
-            FavoriteHeartButton(isFavorite = recipeItem.isFavorite) {
-                onSaveClick(recipeItem)
-            }
         }
-
     }
 }
 
 @Composable
 fun RecipeMainContent(
     recipeItem: RecipeItem,
-    onWatchVideoClick: (String) -> Unit
+    onWatchVideoClick: (String) -> Unit,
+    onSaveClick: (RecipeItem) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
@@ -293,7 +287,7 @@ fun RecipeMainContent(
         )
 
         //Other Details
-        RecipeDetails(recipeItem)
+        RecipeDetails(recipeItem, onSaveClick)
 
         //Desc
         Column(
@@ -339,14 +333,32 @@ fun RecipeMainContent(
 @Composable
 fun RecipeDetails(
     recipeItem: RecipeItem,
+    onSaveClick: (RecipeItem) -> Unit,
 ) {
 
     Column(modifier = Modifier.padding(16.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = recipeItem.title,
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                modifier = Modifier.weight(1f)
+            )
 
-        Text(
-            text = recipeItem.title,
-            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
-        )
+            // star button
+            FavoriteHeartButton(
+                isFavorite = recipeItem.isFavorite,
+                modifier = Modifier
+            ) {
+                onSaveClick(recipeItem)
+            }
+        }
+
+
+        // 時間，评分，难度
         Row(
             modifier = Modifier.padding(top = 8.dp),
             verticalAlignment = Alignment.CenterVertically

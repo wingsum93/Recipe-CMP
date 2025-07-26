@@ -5,7 +5,7 @@ import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -46,7 +46,7 @@ fun FavoriteHeartButton(
     IconButton(
         onClick = { onToggle(!isFavorite) },
         modifier = modifier
-            .sizeIn(30.dp, 48.dp)
+            .size(36.dp) // 整個可點擊範圍
             .background(
                 color = MaterialTheme.colorScheme.background.copy(
                     alpha = 0.8f
@@ -55,10 +55,12 @@ fun FavoriteHeartButton(
             )
     ) {
         Icon(
-            modifier = Modifier.scale(scale.value),
+            modifier = Modifier
+                .size(20.dp) // 圖示大小
+                .scale(scale.value),
             imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
             contentDescription = "Favorite",
-            tint = if (isFavorite) Color.Red else MaterialTheme.colorScheme.onBackground
+            tint = if (isFavorite) Color.Red else MaterialTheme.colorScheme.onSurface
         )
     }
 }
