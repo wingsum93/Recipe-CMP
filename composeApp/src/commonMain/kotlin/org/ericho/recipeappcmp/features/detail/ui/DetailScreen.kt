@@ -1,10 +1,12 @@
 package org.ericho.recipeappcmp.features.detail.ui
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -16,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -147,7 +150,6 @@ fun DetailRoute(
 
     DetailScreen(
         uiState = detailUiState.value,
-        updateIsFavUiState = updateIsFavUiState.value,
         onBackClick = onBackClick,
         onWatchVideoClick = onWatchVideoClick,
         onSaveClick = onSaveClick
@@ -161,7 +163,6 @@ fun DetailScreen(
     uiState: RecipeDetailUiState,
     onBackClick: () -> Unit,
     onWatchVideoClick: (String) -> Unit,
-    updateIsFavUiState: RecipeDetailUpdateIsFavUiState,
     onSaveClick: (RecipeItem) -> Unit,
 ) {
     Scaffold(
@@ -224,6 +225,17 @@ fun RecipeDetailContent(
     onWatchVideoClick: (String) -> Unit,
     onSaveClick: (RecipeItem) -> Unit,
 ) {
+
+    val lazyListState = rememberLazyListState()
+
+    // ✅ 動態計算圖片高度 (240.dp → 最小 100.dp)
+    val scrollOffset = lazyListState.firstVisibleItemScrollOffset
+    val expandedHeight = 240.dp
+    val collapsedHeight = 100.dp
+    val dynamicHeight by animateDpAsState(
+        targetValue = (expandedHeight - scrollOffset.dp).coerceAtLeast(collapsedHeight),
+        label = "collapsing_toolbar"
+    )
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -413,9 +425,10 @@ fun WatchVideoButton(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
         ),
-        modifier = Modifier.padding(16.dp).fillMaxWidth()
+        modifier = Modifier
+            .padding(PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp))
+            .fillMaxWidth()
     ) {
-
         Icon(
             imageVector = Icons.Default.PlayArrow,
             contentDescription = "Watch",
@@ -428,5 +441,4 @@ fun WatchVideoButton(
             )
         )
     }
-
 }
