@@ -1,6 +1,5 @@
 package org.ericho.recipeappcmp.features.detail.ui
 
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -169,9 +167,10 @@ fun DetailScreen(
         modifier = Modifier
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
+            modifier = Modifier
+                .padding(WindowInsets.statusBars.asPaddingValues())
+                .fillMaxSize().background(MaterialTheme.colorScheme.background)
         ) {
-
             when {
                 uiState.recipesDetailIsLoading -> {
                     RecipeSkeletonLoading()
@@ -225,17 +224,6 @@ fun RecipeDetailContent(
     onWatchVideoClick: (String) -> Unit,
     onSaveClick: (RecipeItem) -> Unit,
 ) {
-
-    val lazyListState = rememberLazyListState()
-
-    // ✅ 動態計算圖片高度 (240.dp → 最小 100.dp)
-    val scrollOffset = lazyListState.firstVisibleItemScrollOffset
-    val expandedHeight = 240.dp
-    val collapsedHeight = 100.dp
-    val dynamicHeight by animateDpAsState(
-        targetValue = (expandedHeight - scrollOffset.dp).coerceAtLeast(collapsedHeight),
-        label = "collapsing_toolbar"
-    )
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -246,7 +234,6 @@ fun RecipeDetailContent(
         )
 
         //Back and Save Button UI
-
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth().padding(WindowInsets.statusBars.asPaddingValues())
