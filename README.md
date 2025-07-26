@@ -5,8 +5,6 @@ This app is built using Kotlin Multiplatform using Jetpack Compose based UI Fram
 It demonstrates the use of Koin for Dependency Injection, Ktor for Networking, SQLDelight for Persitence and Compose Navigation for navigation and Compose ViewModel for business logic in Kotlin Multiplatform for Android, iOS, Web and Desktop platforms. 
 It features minimal features of Recipe App such as List of Recipes, Recipe Detail, Search Recipes, Favorite Recipes, Login and Profile Screens etc..
 
-This app is part of My [Compose Multiplatform Full Course](https://youtu.be/zFgnVbQ8JUU?si=A754N2abPycBodWK) on youtube. You can check that to learn about how to build full app in KMP Compose Multiplatform.
-
 ## Libraries used
 
 
@@ -46,3 +44,17 @@ This app is part of My [Compose Multiplatform Full Course](https://youtu.be/zFgn
 
 * Clone this repository.
 * Open in the latest version of Android Studio and You are ready to Go.
+
+## Data Source
+
+* The app uses [Recipe API](https://www.themealdb.com/api.php) for fetching the recipes.
+* All Ingredients[Here](https://www.themealdb.com/api/json/v1/1/list.php?i=list)
+* All Categories[Here](https://www.themealdb.com/api/json/v1/1/list.php?c=list)
+* All Areas[Here](https://www.themealdb.com/api/json/v1/1/list.php?a=list)
+* Filter by ingredient[Here](https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast)
+* Filter by Category[Here](https://www.themealdb.com/api/json/v1/1/filter.php?c=Seafood)
+* Ingredient Image
+  * www.themealdb.com/images/ingredients/lime.png
+  * www.themealdb.com/images/ingredients/lime-small.png
+  * www.themealdb.com/images/ingredients/lime-medium.png
+  * www.themealdb.com/images/ingredients/lime-large.png

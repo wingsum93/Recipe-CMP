@@ -308,6 +308,8 @@ fun RecipeMainContent(
             Text(text = recipeItem.description, style = MaterialTheme.typography.bodySmall)
         }
 
+        InstructionsList(instructions = recipeItem.instructions)
+
         //Ingredients
         IngredientsList(
             ingredients = recipeItem.ingredients.map {
@@ -323,8 +325,6 @@ fun RecipeMainContent(
                 it.first.contains("null") || it.second.contains("null")
             }
         )
-
-        Instructions(instructions = recipeItem.instructions)
 
         WatchVideoButton(
             youtubeLink = recipeItem.youtubeLink,
@@ -385,63 +385,7 @@ fun RecipeDetails(
                 modifier = Modifier.padding(start = 4.dp)
             )
         }
-
     }
-
-}
-
-@Composable
-fun IngredientsList(
-    ingredients: List<Pair<String, String>>,
-) {
-
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-
-        Text(
-            text = "Ingredients",
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-        )
-
-        ingredients.forEach {
-            IngredientsItem(name = it.first, quantity = it.second)
-        }
-    }
-
-}
-
-@Composable
-fun IngredientsItem(
-    name: String,
-    quantity: String
-) {
-
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Text(text = name, style = MaterialTheme.typography.bodySmall)
-        Text(text = quantity, style = MaterialTheme.typography.bodySmall)
-    }
-
-}
-
-@Composable
-fun Instructions(
-    instructions: List<String>,
-) {
-
-    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-
-        Text(
-            text = "Instructions",
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
-        )
-
-        instructions.forEachIndexed { index, value ->
-            Text(text = "${index + 1} $value", style = MaterialTheme.typography.bodySmall)
-        }
-    }
-
 }
 
 @Composable
