@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -57,53 +56,67 @@ fun RecipeSkeletonLoading() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
     ) {
         // 大圖 Shimmer
         ShimmerBox(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(brush)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Title Shimmer
-        ShimmerBox(
-            modifier = Modifier
-                .fillMaxWidth(0.6f)
-                .height(24.dp)
-                .clip(RoundedCornerShape(4.dp))
-                .background(brush)
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Stars + Difficulty Shimmer
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            repeat(3) {
-                ShimmerBox(
-                    modifier = Modifier
-                        .size(16.dp)
-                        .clip(CircleShape)
-                        .background(brush)
+                .height(250.dp)
+                .clip(
+                    RoundedCornerShape(
+                        bottomStart = 16.dp,
+                        bottomEnd = 16.dp,
+                    )
                 )
-            }
+                .background(brush)
+        )
+
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            // Title Shimmer
             ShimmerBox(
                 modifier = Modifier
-                    .width(40.dp)
-                    .height(16.dp)
+                    .fillMaxWidth(0.6f)
+                    .height(28.dp)
                     .clip(RoundedCornerShape(4.dp))
                     .background(brush)
             )
-        }
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-        // Description Shimmer
-        repeat(2) {
+            // Stars + Difficulty Shimmer
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                repeat(2) {
+                    ShimmerBox(
+                        modifier = Modifier
+                            .width(60.dp)
+                            .height(16.dp)
+                            .clip(CircleShape)
+                            .background(brush)
+                    )
+                }
+                ShimmerBox(
+                    modifier = Modifier
+                        .width(40.dp)
+                        .height(16.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(brush)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Description Shimmer
+            ShimmerBox(
+                modifier = Modifier
+                    .fillMaxWidth(0.4f)
+                    .height(24.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(brush)
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+
             ShimmerBox(
                 modifier = Modifier
                     .fillMaxWidth(0.5f)
@@ -112,34 +125,37 @@ fun RecipeSkeletonLoading() {
                     .background(brush)
             )
             Spacer(modifier = Modifier.height(6.dp))
-        }
-        Spacer(modifier = Modifier.height(24.dp))
 
-        // Ingredients Shimmer
-        repeat(8) {
-            ShimmerBox(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(16.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(brush)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Ingredients Shimmer
+            repeat(8) {
+                ShimmerBox(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(16.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(brush)
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Instructions Shimmer
+            repeat(10) {
+                ShimmerBox(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(14.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(brush)
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+            }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
 
-        // Instructions Shimmer
-        repeat(10) {
-            ShimmerBox(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(14.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(brush)
-            )
-            Spacer(modifier = Modifier.height(6.dp))
-        }
     }
 }
 

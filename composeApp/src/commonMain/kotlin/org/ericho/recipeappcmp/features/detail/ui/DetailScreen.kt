@@ -113,19 +113,20 @@ fun DetailRoute(
                 )
             },
             confirmButton = {
-                Button(colors = ButtonDefaults.buttonColors().copy(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                ), onClick = {
-                    showAlertDialog = false
-                    openLoginBottomSheet {
-                        detailUiState.value.recipesDetail?.let {
-                            detailViewModel.updateIsFavorite(
-                                recipeId = it.id,
-                                isAdding = !it.isFavorite
-                            )
+                Button(
+                    colors = ButtonDefaults.buttonColors().copy(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                    ), onClick = {
+                        showAlertDialog = false
+                        openLoginBottomSheet {
+                            detailUiState.value.recipesDetail?.let {
+                                detailViewModel.updateIsFavorite(
+                                    recipeId = it.id,
+                                    isAdding = !it.isFavorite
+                                )
+                            }
                         }
-                    }
-                }) {
+                    }) {
                     Text("Login", color = MaterialTheme.colorScheme.onPrimary)
                 }
             },
@@ -133,10 +134,10 @@ fun DetailRoute(
                 OutlinedButton(
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.primaryContainer),
                     colors = ButtonDefaults.buttonColors().copy(
-                    containerColor = MaterialTheme.colorScheme.background
-                ), onClick = {
-                    showAlertDialog = false
-                }) {
+                        containerColor = MaterialTheme.colorScheme.background
+                    ), onClick = {
+                        showAlertDialog = false
+                    }) {
                     Text("Cancel", color = MaterialTheme.colorScheme.primaryContainer)
                 }
             }
